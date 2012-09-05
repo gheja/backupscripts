@@ -104,18 +104,6 @@ if [ "$verbose" == "yes" ]; then
 	echo "  EXIF supported on OS: $exif_ok"
 fi
 
-echo "$source_dir" | grep -q ' '
-if [ $? == 0 ]; then
-	echo "Source directory name contains spaces - this is not supported at the moment!"
-# 	exit 2
-fi
-
-ls -1 "$source_dir"/* | grep -q ' '
-if [ $? == 0 ]; then
-	echo "Source filenames contain spaces - this is not supported at the moment!"
-# 	exit 2
-fi
-
 IFS_OLD="$IFS"
 IFS="
 "
