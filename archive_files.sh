@@ -6,6 +6,7 @@ original_parameters="$@"
 
 archive="no"
 verbose="no"
+quiet="no"
 dry_run="no"
 exif_ok="no"
 timestamps="yes"
@@ -21,6 +22,7 @@ _help()
 	echo "  -n, --dry-run        do not do any real work"
 	echo "  -T, --no-timestamps  do not put \"Ymd_HMS_\" in target file names"
 	echo "  -v, --verbose        be verbose (for debugging)"
+	echo "  -q, --quiet          be quiet (print errors only)"
 	echo "  -h, --help           this text"
 	echo ""
 	echo "Usage examples:"
@@ -60,6 +62,10 @@ while [ "$1" != "" ]; do
 			verbose="yes"
 		;;
 		
+		--quiet|-q)
+			quiet="yes"
+		;;
+		
 		--help|-h)
 			_help
 			exit 0
@@ -76,15 +82,23 @@ done
 
 if [ "$source_dir" == "" ]; then
 	echo "ERROR: Source dir not supplied, use --source /path/to/source"
-	echo ""
-	_help
+	
+	if [ "$quiet" == "no" ]; then
+		echo ""
+		_help
+	fi
+	
 	exit 1
 fi
 
 if [ "$target_dir" == "" ]; then
 	echo "ERROR: Target dir not supplied, use --target /path/to/target"
-	echo ""
-	_help
+	
+	if [ "$quiet" == "no" ]; then
+		echo ""
+		_help
+	fi
+	
 	exit 1
 fi
 
@@ -117,7 +131,7 @@ ls -1 "$source_dir"/* | while read file; do
 	
 	if [ "$verbose" == "yes" ]; then
 		echo -n "$source_basename... "
-	else
+	elif [ "$quiet" == "no" ]; then
 		echo "$source_basename"
 	fi
 	
